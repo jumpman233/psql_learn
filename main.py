@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""based on Python 2.7."""
+
+
 import psycopg2
 import datetime
 
 
 def q1():
+    """1. What are the most popular three articles of all time."""
     db = psycopg2.connect("dbname=news")
 
     c = db.cursor()
@@ -34,6 +38,7 @@ def q1():
 
 
 def q2():
+    """2. Who are the most popular article authors of all time."""
     db = psycopg2.connect("dbname=news")
 
     print "2. Who are the most popular article authors of all time?"
@@ -64,6 +69,7 @@ def q2():
 
 
 def q3():
+    """3. On which days did more than 1% of requests lead to errors."""
     db = psycopg2.connect("dbname=news")
 
     print "3. On which days did more than 1% of requests lead to errors?"
@@ -103,6 +109,7 @@ def q3():
     print ""
 
     db.close()
+
 
 if __name__ == '__main__':
     q1()
