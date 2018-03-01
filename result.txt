@@ -13,4 +13,4 @@
 
 3. On which days did more than 1% of requests lead to errors?
 
-July 17, 2016 - 2.26% errors
+2016-07-17 - 2.26% errors
