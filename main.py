@@ -98,7 +98,7 @@ def q3():
     data = c.fetchall()
 
     for i in data:
-         print('{0} - {1:.2%} errors'.format(i[0], i[1]))
+        print('{0} - {1:.2%} errors'.format(i[0], i[1]))
 
     print ""
 
