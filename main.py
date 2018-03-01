@@ -73,7 +73,7 @@ def q3():
     c = db.cursor()
 
     c.execute('''
-        SELECT to_char(t.time, 'FMMonth DD, YYYY'), t.ratio
+        SELECT t.time, t.ratio
         FROM (
            SELECT CAST(c_4 AS float)/(c_4+c_2) AS ratio, time1 AS time
             FROM (SELECT count(*) AS c_2, time::date AS time1
