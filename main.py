@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import psycopg2
@@ -16,7 +17,7 @@ def q1():
     c.execute('''
         SELECT title, count(*) as count
         FROM log, articles
-        WHERE strpos(log.path, articles.slug) > 0
+        WHERE substr(log.path, 10) = articles.slug
         GROUP BY articles.title
         ORDER BY count DESC
         LIMIT 3;
@@ -45,7 +46,7 @@ def q2():
         SELECT name, count
         FROM (SELECT articles.author, count(*) AS count
             FROM log, articles
-            WHERE strpos(log.path, articles.slug) > 0
+            WHERE substr(log.path, 10) = articles.slug
             GROUP BY articles.author
             ORDER BY count DESC
             LIMIT 4) AS t
@@ -72,17 +73,17 @@ def q3():
     c = db.cursor()
 
     c.execute('''
-        SELECT t.time, t.ratio
+        SELECT to_char(t.time, 'FMMonth DD, YYYY'), t.ratio
         FROM (
            SELECT CAST(c_4 AS float)/(c_4+c_2) AS ratio, time1 AS time
-            FROM (SELECT count(*) AS c_2, to_char(time, 'YYYY-MM-DD') AS time1
+            FROM (SELECT count(*) AS c_2, time::date AS time1
                 FROM log
                 WHERE status
                 LIKE '200%'
                 GROUP BY time1
                 ) AS t1
             LEFT JOIN (SELECT count(*) AS c_4,
-                       to_char(time, 'YYYY-MM-DD') as time2
+                       time::date AS time2
                 FROM log
                 WHERE status
                 LIKE '404%'
@@ -97,18 +98,13 @@ def q3():
     data = c.fetchall()
 
     for i in data:
-        temp_d = i[0].split('-')
-        d = datetime.datetime(int(temp_d[0]),
-                              int(temp_d[1]),
-                              int(temp_d[2])).strftime('%a %m,%y')
-        print "● %(time)s - %(num).1f %(ratio)s errors" % {'time': d,
-                                                           'num': i[1] * 100,
-                                                           'ratio': '%'}
+         print('{0} - {1:.2%} errors'.format(i[0], i[1]))
 
     print ""
 
     db.close()
 
-q1()
-q2()
-q3()
+if __name__ == '__main__':
+    q1()
+    q2()
+    q3()
